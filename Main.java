@@ -6,53 +6,29 @@ class Rover {
     int y = 0;
     int speed = 1;
 
-    // direction == 0 up, 1 down, 2 right, 3 left
+    // direction == 0 up, 1 right, 2 down, 3 left
 
-    public void right() {
-        switch (direction) {
-            case 0:
-                direction = 1;
-                break;
-            case 1:
-                direction = 2;
-                break;
-            case 2:
-                direction = 3;
-                break;
-            case 3:
-                direction = 0;
-                break;
-        }
+    public void right(int intRepeats) {
+        direction += intRepeats;
+        direction %= 4;
     }
-    public void left() {
-        switch (direction) {
-            case 0:
-                direction = 3;
-                break;
-            case 1:
-                direction = 2;
-                break;
-            case 2:
-                direction = 1;
-                break;
-            case 3:
-                direction = 0;
-                break;
-        }
+    public void left(int intRepeats) {
+        direction -= intRepeats;
+        while (direction < 0) { direction += 4; }
     }
-    public void move() {
+    public void move(int intRepeats) {
         switch (direction) {
             case 3:
-                x -= speed;
+                x -= speed * intRepeats;
                 break;
             case 1:
-                x += speed;
+                x += speed * intRepeats;
                 break;
             case 2:
-                y += speed;
+                y += speed * intRepeats;
                 break;
             case 0:
-                y -= speed;
+                y -= speed * intRepeats;
                 break;
         }
     }
@@ -67,34 +43,56 @@ public class Main {
 
         while (sc.hasNext()) {
             String expr = sc.next();
+            String upperCase = expr.toUpperCase();
 
-            for (int i = 0; i < expr.length(); i++) {
-                command = expr.charAt(i);
-                switch (command) {
-                    case 'L':
-                        rv.left();
-                        break;
-                    case 'R':
-                        rv.right();
-                        break;
-                    case 'M':
-                        rv.move();
-                        break;
-                    case 'A':
-                        rv.speed++;
-                        System.out.printf("Your speed is %s times faster now \n", rv.speed);
-                        break;
-                    case 'B':
-                        rv.speed--;
-                        System.out.printf("Your speed is %s times slower now \n", rv.speed);
-                        break;
+            for (int i = 0; i < upperCase.length(); i++) {
+                command = upperCase.charAt(i);
+
+                if (Character.isAlphabetic(command)) {
+                    StringBuilder strRepeats = new StringBuilder();
+                    while (i < upperCase.length() - 1 && Character.isDigit(upperCase.charAt(i+1))) {
+                        strRepeats.append(upperCase.charAt(i + 1));
+                        ++i;
+                    }
+                    System.out.println(command);
+                    System.out.println(strRepeats);
+
+                    if (strRepeats.isEmpty()){
+                        strRepeats = new StringBuilder("1");
+                    }
+
+                    int intRepeats = Integer.parseInt(strRepeats.toString());
+
+                    switch (command) {
+                        case 'L':
+                            rv.left(intRepeats);
+                            break;
+                        case 'R':
+                            rv.right(intRepeats);
+                            break;
+                        case 'M':
+                            rv.move(intRepeats);
+                            break;
+                        case 'A':
+                            rv.speed += intRepeats;
+                            System.out.printf("Your speed is %s times faster now \n", rv.speed);
+                            break;
+                        case 'B':
+                            rv.speed -= intRepeats;
+                            System.out.printf("Your speed is %s times slower now \n", rv.speed);
+                            break;
+                        default:
+                            System.out.println("Wrong command");
+                    }
+                } else {
+                    System.out.println("You can use alphanumeric characters only");
                 }
+                result(rv.x, rv.y, rv.direction);
             }
-            result(rv.x,rv.y,rv.direction);
         }
     }
-    public static void result(int x, int y, int d) {
-        System.out.printf("Current position is (%s,%s)\n",x,y);
-        System.out.printf("Current direction is %s\n",d);
+    public static void result ( int x, int y, int d){
+        System.out.printf("Current position is (%s,%s)\n", x, y);
+        System.out.printf("Current direction is %s\n", d);
     }
 }
