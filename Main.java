@@ -30,10 +30,10 @@ class Rover {
                 x += speed * intRepeats;
                 break;
             case 2:
-                y += speed * intRepeats;
+                y -= speed * intRepeats;
                 break;
             case 0:
-                y -= speed * intRepeats;
+                y += speed * intRepeats;
                 break;
         }
     }
