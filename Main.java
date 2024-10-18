@@ -6,7 +6,6 @@ class Rover {
     int y = 0;
     int speed = 1;
 
-    // direction == 0 up, 1 right, 2 down, 3 left
 
     // Right turn
     public void right(int intRepeats) {
@@ -37,9 +36,23 @@ class Rover {
                 break;
         }
     }
+    public void accelerate(int intRepeats) {
+        speed += intRepeats;
+        System.out.printf("Rover's speed is %s times faster now \n", speed);
+    }
+    public void breaking(int intRepeats) {
+        speed -= intRepeats;
+        if (speed >= 1) {
+            System.out.printf("Rover's speed is %s times slower now \n", speed);
+        } else {
+            speed = 1;
+            System.out.println("Rover's speed can't be less than 1");
+        }
+    }
 }
 public class Main {
     public static void main(String[] args) {
+        System.out.println("Here is a list of commands:\n L - left turn\nR - right turn\nM - move further\nA - accelerate\nB - break\nF - finish");
         System.out.println("input command:");
         Scanner sc = new Scanner(System.in);
         Rover rv = new Rover();
@@ -79,13 +92,16 @@ public class Main {
                             rv.move(intRepeats);
                             break;
                         case 'A':  //accelerate
-                            rv.speed += intRepeats;
-                            System.out.printf("Your speed is %s times faster now \n", rv.speed);
+                            rv.accelerate(intRepeats);
                             break;
                         case 'B':  //break
-                            rv.speed -= intRepeats;
-                            System.out.printf("Your speed is %s times slower now \n", rv.speed);
+                            rv.breaking(intRepeats);
                             break;
+                        case 'F':
+                            sc.close();
+                            result(rv.x, rv.y, rv.direction);
+                            System.out.println("Exiting the program...");
+                            return;
                         default:
                             System.out.println("Wrong command");
                     }
@@ -96,8 +112,9 @@ public class Main {
             }
         }
     }
-    public static void result ( int x, int y, int d){
+    public static void result ( int x, int y, int d) {
+        String[] directions = {"UP","RIGHT","DOWN","LEFT"};
         System.out.printf("Current position is (%s,%s)\n", x, y);
-        System.out.printf("Current direction is %s\n", d);
+        System.out.printf("Current direction is %s\n", directions[d]);
     }
 }
